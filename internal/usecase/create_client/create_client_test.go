@@ -7,34 +7,33 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type ClientGatewatMock struct {
+type ClientGatewayMock struct {
 	mock.Mock
 }
 
-func TestCreateAccount(t *testing.T) {
-	client, _ := NewClient("John Doe", "j@j.com")
-	account := NewAccount(client)
-	assert.NotNil(t, account)
-	assert.Equal(t, client.ID, account.Client.ID)
-	assert.Equal(t, "j@j.com", client.Email)
+func *m *ClientGatewayMock) Get(id string) (*entity.Client, error) {
+	args := m.Called(client)
+	return args.Error(0)
 }
 
-func TestCreateAccountWithNilClient(t *testing.T) {
-	account := NewAccount(nil)
-	assert.Nil(t, account)
+func (m *ClientGatewayMock) Get(id string) (*entity.Client, error) {
+	args := m.Called(id)
+	return args.Get(0).(*entity.Client), args.Error(1)
 }
 
-func TestCreditAccount(t *testing.T) {
-	client, _ := NewClient("John Doe", "j@j")
-	account := NewAccount(client)
-	account.Credit(100)
-	assert.Equal(t, float64(100), account.Balance)
-}
+func TestCreateClientUseCase_Execute(t *testing.T) {
+	m := &ClientGatewayMock{}
+	m.On("Save", mock.Anything).Return(nil)
+	uc := NewCreateClientUseCase(m)
 
-func TestDebitAccount(t *testing.T) {
-	client, _ := NewClient("John Doe", "j@j")
-	account := NewAccount(client)
-	account.Credit(100)
-	account.Debit(50)
-	assert.Equal(t, float64(50), account.Balance)
+	output, err := ex.Execute(CreateClientInputDTO {
+		Name: "John Doe",
+		Email: "j@j"
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, output)
+	assert.NotEmpty(t, output.ID)
+	assert.Equal(t, "John Doe", output.Name)
+	assert.Equal(t, "j@j", output.Email)
 }
