@@ -1,4 +1,4 @@
-module petrovick/wallet-core
+module github.com/petrovick/fc-ms-wallet
 
 go 1.20
 

@@ -1,4 +1,4 @@
-import "github.com.br/devfullcycle/fc-ms-wallet/internal/entity"
+import "github.com/petrovick/fc-ms-wallet/internal/entity"
 
 type ClientGateway interface {
 	Get(id string) (*entity.Client, error)
