@@ -21,6 +21,7 @@ func NewTransaction(accountFrom *Account, accountTo *Account, amount float64) (*
 		AccountFrom: accountFrom,
 		AccountTo:   accountTo,
 		CreatedAt:   time.Now(),
+		Amount:      amount,
 	}
 	err := transaction.Validate()
 
